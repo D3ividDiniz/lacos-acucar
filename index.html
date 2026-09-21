@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Laços de Açúcar • Festival</title>
+<style>
+:root{--pink:#ed2a7c;--pink2:#ff5a9d;--soft:#fff1f7;--ink:#29232a;--muted:#766b73;--line:#eadde4;--green:#16835b;--red:#c63b55;--white:#fff}
+*{box-sizing:border-box}body{margin:0;background:#faf8f9;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+button,input{font:inherit}button{cursor:pointer}.app{max-width:900px;margin:auto;min-height:100vh;background:#faf8f9}
+header{background:linear-gradient(135deg,var(--pink),#d91f6e);color:white;padding:22px 18px 18px;position:sticky;top:0;z-index:5;box-shadow:0 3px 14px #0001}
+.brand{font-weight:800;font-size:21px}.sub{font-size:13px;opacity:.9;margin-top:3px}
+.tabs{display:flex;gap:8px;margin-top:17px}.tab{flex:1;border:0;background:#ffffff28;color:white;padding:11px 8px;border-radius:12px;font-weight:750}.tab.active{background:white;color:var(--pink)}
+main{padding:16px}.screen{display:none}.screen.active{display:block}
+.card{background:white;border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 2px 10px #00000008}
+h2{font-size:18px;margin:0 0 5px}.hint{font-size:13px;color:var(--muted);line-height:1.45}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+label{font-size:12px;font-weight:750;color:#62565e;display:block;margin-bottom:5px}input{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;background:#fff;outline:none}input:focus{border-color:var(--pink);box-shadow:0 0 0 3px #ed2a7c15}
+.primary{width:100%;border:0;background:var(--pink);color:#fff;padding:14px;border-radius:12px;font-weight:800;margin-top:12px}.secondary{border:1px solid var(--line);background:#fff;color:var(--ink);padding:10px 12px;border-radius:10px;font-weight:700}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.kpi{background:var(--soft);border-radius:14px;padding:13px}.kpi small{display:block;color:var(--muted);font-size:11px}.kpi strong{display:block;font-size:20px;margin-top:3px}.good{color:var(--green)!important}.bad{color:var(--red)!important}
+.row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #f0e9ed;font-size:14px}.row:last-child{border:0}.row b{font-weight:800}
+.section-title{font-size:14px;font-weight:850;margin:3px 0 10px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}.actions>*{flex:1;min-width:120px}
+.empty{text-align:center;padding:28px 12px;color:var(--muted)}
+.festival{border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:10px;background:#fff}
+.f-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.f-title{font-weight:850}.f-date{font-size:12px;color:var(--muted);margin-top:2px}.profit{font-weight:900;font-size:18px;color:var(--green);white-space:nowrap}.profit.loss{color:var(--red)}
+.f-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}.mini{background:#faf6f8;border-radius:10px;padding:9px}.mini small{display:block;font-size:10px;color:var(--muted)}.mini b{font-size:13px}
+.note{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.4}.danger{color:var(--red);border-color:#f0cbd3}
+.filter{display:flex;gap:8px;align-items:center;margin-bottom:10px}.filter input{flex:1}
+.big{font-size:25px;font-weight:900}.bar{height:9px;background:#f0e8ed;border-radius:99px;overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;background:var(--pink);border-radius:99px}
+@media(min-width:700px){.kpis{grid-template-columns:repeat(4,1fr)}.grid{grid-template-columns:repeat(3,1fr)}main{padding:22px}.f-mini{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="brand">Laços de Açúcar</div>
+  <div class="sub">Controle dos Festivais de Fatia</div>
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('sim')">Simulador</button>
+    <button class="tab" onclick="showTab('hist')">Histórico</button>
+  </div>
+</header>
+
+<main>
+<section id="sim" class="screen active">
+  <div class="card">
+    <h2>Simule um festival</h2>
+    <div class="hint">Mude os números e veja imediatamente quanto precisa vender para o festival valer a pena.</div>
+  </div>
+  <div class="card">
+    <div class="section-title">Produção e vendas</div>
+    <div class="grid">
+      <div><label>Custo médio de 1 bolo</label><input id="cake" type="number" step=".01" value="95"></div>
+      <div><label>Bolos levados</label><input id="cakes" type="number" step="1" value="5"></div>
+      <div><label>Fatias por bolo</label><input id="slices" type="number" step="1" value="16"></div>
+      <div><label>Perda / não vendidos (%)</label><input id="loss" type="number" step=".1" value="30"></div>
+      <div><label>Preço da fatia</label><input id="price" type="number" step=".01" value="20"></div>
+      <div><label>Festivais por mês</label><input id="monthly" type="number" step="1" value="6"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="section-title">Custos extras do festival</div>
+    <div class="grid">
+      <div><label>Energia/gás rateados</label><input id="utilities" type="number" step=".01" value="12"></div>
+      <div><label>Transporte</label><input id="transport" type="number" step=".01" value="50"></div>
+      <div><label>Outros custos</label><input id="other" type="number" step=".01" value="0"></div>
+    </div>
+    <button class="primary" onclick="calc()">Atualizar resultado</button>
+  </div>
+  <div class="card">
+    <div class="section-title">Resultado do festival</div>
+    <div class="kpis">
+      <div class="kpi"><small>Custo total</small><strong id="rCost">R$ 0</strong></div>
+      <div class="kpi"><small>Faturamento</small><strong id="rRev">R$ 0</strong></div>
+      <div class="kpi"><small>Lucro</small><strong id="rProfit">R$ 0</strong></div>
+      <div class="kpi"><small>Margem</small><strong id="rMargin">0%</strong></div>
+      <div class="kpi"><small>Produzidas</small><strong id="rProd">0</strong></div>
+      <div class="kpi"><small>Vendidas</small><strong id="rSold">0</strong></div>
+      <div class="kpi"><small>Não vendidas</small><strong id="rUnsold">0</strong></div>
+      <div class="kpi"><small>Custo por fatia vendida</small><strong id="rUnit">R$ 0</strong></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="section-title">Visão mensal</div>
+    <div class="row"><span>Lucro por festival</span><b id="mPer">R$ 0</b></div>
+    <div class="row"><span>Lucro estimado no mês</span><b id="mProfit" class="good">R$ 0</b></div>
+    <div class="row"><span>Faturamento estimado no mês</span><b id="mRev">R$ 0</b></div>
+    <div class="row"><span>Festivais para acumular R$ 3.000</span><b id="m3000">0</b></div>
+  </div>
+  <div class="card">
+    <div class="section-title">Como o dinheiro está sendo formado</div>
+    <div class="row"><span>Bolos</span><b id="cCake">R$ 0</b></div>
+    <div class="row"><span>Energia/gás</span><b id="cUtil">R$ 0</b></div>
+    <div class="row"><span>Transporte</span><b id="cTrans">R$ 0</b></div>
+    <div class="row"><span>Outros</span><b id="cOther">R$ 0</b></div>
+  </div>
+</section>
+
+<section id="hist" class="screen">
+  <div class="card">
+    <h2>Histórico dos festivais</h2>
+    <div class="hint">Aqui sua mãe só precisa registrar o que realmente aconteceu. O aplicativo faz as contas e mostra se o resultado está melhorando ou piorando.</div>
+  </div>
+  <div class="card">
+    <div class="section-title">Novo festival</div>
+    <div class="grid">
+      <div><label>Data</label><input id="hDate" type="date"></div>
+      <div><label>Fatias levadas</label><input id="hTaken" type="number" value="80"></div>
+      <div><label>Fatias vendidas</label><input id="hSold" type="number"></div>
+      <div><label>Preço por fatia</label><input id="hPrice" type="number" step=".01" value="20"></div>
+      <div><label>Custo total dos bolos</label><input id="hCakeCost" type="number" step=".01" value="475"></div>
+      <div><label>Outros custos</label><input id="hExtra" type="number" step=".01" value="62"></div>
+    </div>
+    <div style="margin-top:10px"><label>Observação</label><input id="hNote" placeholder="Ex.: vendeu muito, sobrou bolo, Uber mais caro..."></div>
+    <button class="primary" onclick="addHistory()">Salvar festival</button>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Resumo real dos festivais</div>
+    <div class="kpis">
+      <div class="kpi"><small>Festivais</small><strong id="sCount">0</strong></div>
+      <div class="kpi"><small>Faturamento total</small><strong id="sRev">R$ 0</strong></div>
+      <div class="kpi"><small>Lucro total</small><strong id="sProfit">R$ 0</strong></div>
+      <div class="kpi"><small>Lucro médio</small><strong id="sAvg">R$ 0</strong></div>
+    </div>
+    <div style="margin-top:14px" class="row"><span>Taxa média de venda</span><b id="sSell">0%</b></div>
+    <div class="row"><span>Margem média</span><b id="sMargin">0%</b></div>
+    <div class="row"><span>Último resultado</span><b id="sLast">-</b></div>
+    <div class="row"><span>Tendência recente</span><b id="sTrend">-</b></div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Registros</div>
+    <div class="filter"><input id="search" placeholder="Filtrar por observação ou data..." oninput="renderHistory()"><button class="secondary" onclick="exportCSV()">Exportar</button></div>
+    <div id="historyList"></div>
+    <button class="secondary danger" style="width:100%;margin-top:12px" onclick="clearHistory()">Apagar histórico</button>
+  </div>
+</section>
+</main>
+</div>
+
+<script>
+const BRL=v=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(Number(v)||0);
+const pct=v=>(Number(v)||0).toFixed(1)+'%';
+const val=id=>Number(document.getElementById(id).value)||0;
+function saveSim(){const ids=['cake','cakes','slices','loss','price','monthly','utilities','transport','other'];let o={};ids.forEach(id=>o[id]=document.getElementById(id).value);localStorage.setItem('la_sim',JSON.stringify(o))}
+function loadSim(){try{const o=JSON.parse(localStorage.getItem('la_sim')||'{}');Object.keys(o).forEach(id=>{if(document.getElementById(id))document.getElementById(id).value=o[id]})}catch(e){}}
+function calc(){
+ saveSim();
+ const cake=val('cake'),cakes=val('cakes'),slices=val('slices'),loss=Math.max(0,Math.min(100,val('loss'))),price=val('price'),monthly=val('monthly'),utilities=val('utilities'),transport=val('transport'),other=val('other');
+ const prod=cakes*slices,sold=Math.round(prod*(1-loss/100)),unsold=prod-sold,cost=cake*cakes+utilities+transport+other,rev=sold*price,profit=rev-cost,margin=rev?profit/rev*100:0,unit=sold?cost/sold:0;
+ document.getElementById('rCost').textContent=BRL(cost);document.getElementById('rRev').textContent=BRL(rev);document.getElementById('rProfit').textContent=BRL(profit);document.getElementById('rMargin').textContent=pct(margin);
+ document.getElementById('rProd').textContent=prod;document.getElementById('rSold').textContent=sold;document.getElementById('rUnsold').textContent=unsold;document.getElementById('rUnit').textContent=BRL(unit);
+ document.getElementById('mPer').textContent=BRL(profit);document.getElementById('mProfit').textContent=BRL(profit*monthly);document.getElementById('mRev').textContent=BRL(rev*monthly);document.getElementById('m3000').textContent=profit>0?Math.ceil(3000/profit):'—';
+ document.getElementById('cCake').textContent=BRL(cake*cakes);document.getElementById('cUtil').textContent=BRL(utilities);document.getElementById('cTrans').textContent=BRL(transport);document.getElementById('cOther').textContent=BRL(other);
+ document.getElementById('rProfit').className=profit>=0?'good':'bad';document.getElementById('rMargin').className=margin>=0?'good':'bad';
+}
+function showTab(t){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(t).classList.add('active');document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',(t==='sim'?i===0:i===1)));if(t==='hist')renderHistory()}
+function getHist(){try{return JSON.parse(localStorage.getItem('la_hist')||'[]')}catch(e){return[]}}
+function addHistory(){
+ const date=document.getElementById('hDate').value||new Date().toISOString().slice(0,10),taken=val('hTaken'),sold=val('hSold'),price=val('hPrice'),cakeCost=val('hCakeCost'),extra=val('hExtra');
+ if(!taken||sold<0){alert('Preencha a quantidade de fatias levadas.');return}
+ const rec={id:Date.now(),date,taken,sold,price,cakeCost,extra,note:document.getElementById('hNote').value.trim()};
+ let h=getHist();h.unshift(rec);localStorage.setItem('la_hist',JSON.stringify(h));document.getElementById('hSold').value='';document.getElementById('hNote').value='';renderHistory();
+}
+function renderHistory(){
+ const h=getHist(),q=(document.getElementById('search')?.value||'').toLowerCase();const filtered=h.filter(r=>(r.date+' '+r.note).toLowerCase().includes(q));
+ let rev=0,profit=0,sell=0,margin=0;h.forEach(r=>{const c=Number(r.cakeCost)+Number(r.extra),rv=Number(r.sold)*Number(r.price),p=rv-c;rev+=rv;profit+=p;sell+=r.taken?r.sold/r.taken*100:0;margin+=rv?p/rv*100:0});
+ document.getElementById('sCount').textContent=h.length;document.getElementById('sRev').textContent=BRL(rev);document.getElementById('sProfit').textContent=BRL(profit);document.getElementById('sAvg').textContent=BRL(h.length?profit/h.length:0);document.getElementById('sSell').textContent=pct(h.length?sell/h.length:0);document.getElementById('sMargin').textContent=pct(h.length?margin/h.length:0);
+ if(h.length){const latest=h[0],lp=latest.sold*latest.price-(Number(latest.cakeCost)+Number(latest.extra));document.getElementById('sLast').textContent=BRL(lp);if(h.length>=2){const prev=h[1],pp=prev.sold*prev.price-(Number(prev.cakeCost)+Number(prev.extra));document.getElementById('sTrend').textContent=lp>pp?'Melhor que o anterior ↑':lp<pp?'Pior que o anterior ↓':'Igual ao anterior →';document.getElementById('sTrend').className=lp>=pp?'good':'bad'}}else{document.getElementById('sLast').textContent='-';document.getElementById('sTrend').textContent='-'}
+ const box=document.getElementById('historyList');if(!filtered.length){box.innerHTML='<div class="empty">Nenhum festival registrado ainda.</div>';return}
+ box.innerHTML=filtered.map(r=>{const cost=Number(r.cakeCost)+Number(r.extra),rv=Number(r.sold)*Number(r.price),p=rv-cost,rate=r.taken?r.sold/r.taken*100:0;return `<div class="festival"><div class="f-head"><div><div class="f-title">${formatDate(r.date)}</div><div class="f-date">${r.sold} de ${r.taken} fatias vendidas • ${pct(rate)} de venda</div></div><div class="profit ${p<0?'loss':''}">${BRL(p)}</div></div><div class="f-mini"><div class="mini"><small>Faturamento</small><b>${BRL(rv)}</b></div><div class="mini"><small>Custo</small><b>${BRL(cost)}</b></div><div class="mini"><small>Preço/fatia</small><b>${BRL(r.price)}</b></div><div class="mini"><small>Margem</small><b>${pct(rv?p/rv*100:0)}</b></div></div>${r.note?`<div class="note">${escapeHtml(r.note)}</div>`:''}</div>`}).join('');
+}
+function formatDate(s){const [y,m,d]=s.split('-');return `${d}/${m}/${y}`}
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function clearHistory(){if(confirm('Apagar todos os festivais registrados?')){localStorage.removeItem('la_hist');renderHistory()}}
+function exportCSV(){const h=getHist();if(!h.length){alert('Não há histórico para exportar.');return}let csv='Data;Fatias levadas;Fatias vendidas;Preço;Custo bolos;Outros custos;Faturamento;Lucro;Observação\n';h.forEach(r=>{const rv=r.sold*r.price,p=rv-(+r.cakeCost+ +r.extra);csv+=`${r.date};${r.taken};${r.sold};${r.price};${r.cakeCost};${r.extra};${rv};${p};"${r.note.replaceAll('"','""')}"\n`});const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));a.download='historico-lacos-de-acucar.csv';a.click()}
+document.querySelectorAll('#sim input').forEach(x=>x.addEventListener('input',calc));
+document.getElementById('hDate').value=new Date().toISOString().slice(0,10);loadSim();calc();renderHistory();
+</script>
+</body>
+</html>
