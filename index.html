@@ -1,182 +1,565 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Laços de Açúcar • Festival</title>
-<style>
-:root{--pink:#ed2a7c;--pink2:#ff5a9d;--soft:#fff1f7;--ink:#29232a;--muted:#766b73;--line:#eadde4;--green:#16835b;--red:#c63b55;--white:#fff}
-*{box-sizing:border-box}body{margin:0;background:#faf8f9;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
-button,input{font:inherit}button{cursor:pointer}.app{max-width:900px;margin:auto;min-height:100vh;background:#faf8f9}
-header{background:linear-gradient(135deg,var(--pink),#d91f6e);color:white;padding:22px 18px 18px;position:sticky;top:0;z-index:5;box-shadow:0 3px 14px #0001}
-.brand{font-weight:800;font-size:21px}.sub{font-size:13px;opacity:.9;margin-top:3px}
-.tabs{display:flex;gap:8px;margin-top:17px}.tab{flex:1;border:0;background:#ffffff28;color:white;padding:11px 8px;border-radius:12px;font-weight:750}.tab.active{background:white;color:var(--pink)}
-main{padding:16px}.screen{display:none}.screen.active{display:block}
-.card{background:white;border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 2px 10px #00000008}
-h2{font-size:18px;margin:0 0 5px}.hint{font-size:13px;color:var(--muted);line-height:1.45}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
-label{font-size:12px;font-weight:750;color:#62565e;display:block;margin-bottom:5px}input{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;background:#fff;outline:none}input:focus{border-color:var(--pink);box-shadow:0 0 0 3px #ed2a7c15}
-.primary{width:100%;border:0;background:var(--pink);color:#fff;padding:14px;border-radius:12px;font-weight:800;margin-top:12px}.secondary{border:1px solid var(--line);background:#fff;color:var(--ink);padding:10px 12px;border-radius:10px;font-weight:700}
-.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.kpi{background:var(--soft);border-radius:14px;padding:13px}.kpi small{display:block;color:var(--muted);font-size:11px}.kpi strong{display:block;font-size:20px;margin-top:3px}.good{color:var(--green)!important}.bad{color:var(--red)!important}
-.row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #f0e9ed;font-size:14px}.row:last-child{border:0}.row b{font-weight:800}
-.section-title{font-size:14px;font-weight:850;margin:3px 0 10px}
-.actions{display:flex;gap:8px;flex-wrap:wrap}.actions>*{flex:1;min-width:120px}
-.empty{text-align:center;padding:28px 12px;color:var(--muted)}
-.festival{border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:10px;background:#fff}
-.f-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.f-title{font-weight:850}.f-date{font-size:12px;color:var(--muted);margin-top:2px}.profit{font-weight:900;font-size:18px;color:var(--green);white-space:nowrap}.profit.loss{color:var(--red)}
-.f-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}.mini{background:#faf6f8;border-radius:10px;padding:9px}.mini small{display:block;font-size:10px;color:var(--muted)}.mini b{font-size:13px}
-.note{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.4}.danger{color:var(--red);border-color:#f0cbd3}
-.filter{display:flex;gap:8px;align-items:center;margin-bottom:10px}.filter input{flex:1}
-.big{font-size:25px;font-weight:900}.bar{height:9px;background:#f0e8ed;border-radius:99px;overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;background:var(--pink);border-radius:99px}
-@media(min-width:700px){.kpis{grid-template-columns:repeat(4,1fr)}.grid{grid-template-columns:repeat(3,1fr)}main{padding:22px}.f-mini{grid-template-columns:repeat(4,1fr)}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Laços de Açúcar - Festivais</title>
+    <style>
+        :root {
+            --primary: #ED2A7C;
+            --primary-light: #fbe6f0;
+            --primary-dark: #c41e63;
+            --success: #10b981;
+            --danger: #ef4444;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --bg-body: #f3f4f6;
+            --bg-card: #ffffff;
+            --border: #e5e7eb;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        
+        body { background-color: var(--bg-body); color: var(--text-main); padding-bottom: 40px; }
+
+        header { background-color: var(--primary); color: white; padding: 24px 20px; text-align: center; border-bottom-left-radius: 24px; border-bottom-right-radius: 24px; box-shadow: 0 4px 6px rgba(237, 42, 124, 0.2); }
+        header h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 4px; }
+        header p { font-size: 14px; opacity: 0.9; }
+
+        .tabs { display: flex; margin: 20px; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .tab-btn { flex: 1; padding: 16px 0; border: none; background: transparent; font-size: 16px; font-weight: 600; color: var(--text-muted); transition: 0.2s; }
+        .tab-btn.active { background: var(--primary-light); color: var(--primary); }
+
+        .container { padding: 0 20px; display: none; }
+        .container.active { display: block; animation: fadeIn 0.3s ease; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card { background: var(--bg-card); border-radius: 16px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .card h2 { font-size: 18px; color: var(--primary); margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 14px; color: var(--text-muted); margin-bottom: 6px; font-weight: 500; }
+        .form-group input { width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 16px; outline: none; transition: 0.2s; background: #fafafa; }
+        .form-group input:focus { border-color: var(--primary); background: white; }
+
+        .btn-primary { width: 100%; background: var(--primary); color: white; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: bold; box-shadow: 0 4px 12px rgba(237, 42, 124, 0.3); transition: 0.2s; }
+        .btn-primary:active { transform: scale(0.98); background: var(--primary-dark); }
+        .btn-outline { width: 100%; background: transparent; color: var(--primary); border: 2px solid var(--primary); padding: 14px; border-radius: 12px; font-size: 16px; font-weight: bold; margin-bottom: 16px; }
+        .btn-danger { background: transparent; color: var(--danger); border: none; font-size: 14px; padding: 8px; font-weight: 600; text-align: right; width: 100%; }
+
+        .result-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--border); }
+        .result-row:last-child { border-bottom: none; }
+        .result-label { font-size: 15px; color: var(--text-muted); }
+        .result-value { font-size: 16px; font-weight: 600; color: var(--text-main); }
+        .highlight { font-size: 24px; color: var(--primary); font-weight: 800; }
+        .success { color: var(--success); font-weight: bold; }
+        .danger { color: var(--danger); font-weight: bold; }
+
+        /* Modal Styles */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: flex-end; z-index: 1000; }
+        .modal { background: white; width: 100%; max-height: 90vh; border-top-left-radius: 24px; border-top-right-radius: 24px; padding: 24px; overflow-y: auto; transform: translateY(100%); transition: transform 0.3s ease; }
+        .modal.open { transform: translateY(0); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-header h2 { margin: 0; border: none; padding: 0; }
+        .close-btn { background: none; border: none; font-size: 28px; color: var(--text-muted); line-height: 1; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        
+        .history-card { border-left: 4px solid var(--primary); }
+        .history-date { font-size: 14px; color: var(--text-muted); margin-bottom: 4px; }
+        .history-title { font-size: 18px; font-weight: bold; margin-bottom: 12px; }
+        .trend-up { color: var(--success); font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+        .trend-down { color: var(--danger); font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+
+        .stat-box { background: var(--primary-light); padding: 16px; border-radius: 12px; text-align: center; margin-bottom: 12px; }
+        .stat-box.dark { background: var(--primary); color: white; }
+        .stat-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; opacity: 0.9; }
+        .stat-value { font-size: 24px; font-weight: 800; }
+    </style>
 </head>
 <body>
-<div class="app">
-<header>
-  <div class="brand">Laços de Açúcar</div>
-  <div class="sub">Controle dos Festivais de Fatia</div>
-  <div class="tabs">
-    <button class="tab active" onclick="showTab('sim')">Simulador</button>
-    <button class="tab" onclick="showTab('hist')">Histórico</button>
-  </div>
-</header>
 
-<main>
-<section id="sim" class="screen active">
-  <div class="card">
-    <h2>Simule um festival</h2>
-    <div class="hint">Mude os números e veja imediatamente quanto precisa vender para o festival valer a pena.</div>
-  </div>
-  <div class="card">
-    <div class="section-title">Produção e vendas</div>
-    <div class="grid">
-      <div><label>Custo médio de 1 bolo</label><input id="cake" type="number" step=".01" value="95"></div>
-      <div><label>Bolos levados</label><input id="cakes" type="number" step="1" value="5"></div>
-      <div><label>Fatias por bolo</label><input id="slices" type="number" step="1" value="16"></div>
-      <div><label>Perda / não vendidos (%)</label><input id="loss" type="number" step=".1" value="30"></div>
-      <div><label>Preço da fatia</label><input id="price" type="number" step=".01" value="20"></div>
-      <div><label>Festivais por mês</label><input id="monthly" type="number" step="1" value="6"></div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="section-title">Custos extras do festival</div>
-    <div class="grid">
-      <div><label>Energia/gás rateados</label><input id="utilities" type="number" step=".01" value="12"></div>
-      <div><label>Transporte</label><input id="transport" type="number" step=".01" value="50"></div>
-      <div><label>Outros custos</label><input id="other" type="number" step=".01" value="0"></div>
-    </div>
-    <button class="primary" onclick="calc()">Atualizar resultado</button>
-  </div>
-  <div class="card">
-    <div class="section-title">Resultado do festival</div>
-    <div class="kpis">
-      <div class="kpi"><small>Custo total</small><strong id="rCost">R$ 0</strong></div>
-      <div class="kpi"><small>Faturamento</small><strong id="rRev">R$ 0</strong></div>
-      <div class="kpi"><small>Lucro</small><strong id="rProfit">R$ 0</strong></div>
-      <div class="kpi"><small>Margem</small><strong id="rMargin">0%</strong></div>
-      <div class="kpi"><small>Produzidas</small><strong id="rProd">0</strong></div>
-      <div class="kpi"><small>Vendidas</small><strong id="rSold">0</strong></div>
-      <div class="kpi"><small>Não vendidas</small><strong id="rUnsold">0</strong></div>
-      <div class="kpi"><small>Custo por fatia vendida</small><strong id="rUnit">R$ 0</strong></div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="section-title">Visão mensal</div>
-    <div class="row"><span>Lucro por festival</span><b id="mPer">R$ 0</b></div>
-    <div class="row"><span>Lucro estimado no mês</span><b id="mProfit" class="good">R$ 0</b></div>
-    <div class="row"><span>Faturamento estimado no mês</span><b id="mRev">R$ 0</b></div>
-    <div class="row"><span>Festivais para acumular R$ 3.000</span><b id="m3000">0</b></div>
-  </div>
-  <div class="card">
-    <div class="section-title">Como o dinheiro está sendo formado</div>
-    <div class="row"><span>Bolos</span><b id="cCake">R$ 0</b></div>
-    <div class="row"><span>Energia/gás</span><b id="cUtil">R$ 0</b></div>
-    <div class="row"><span>Transporte</span><b id="cTrans">R$ 0</b></div>
-    <div class="row"><span>Outros</span><b id="cOther">R$ 0</b></div>
-  </div>
-</section>
+    <header>
+        <h1>Laços de Açúcar</h1>
+        <p>Olá, Meire! Controle dos Festivais de Fatia</p>
+    </header>
 
-<section id="hist" class="screen">
-  <div class="card">
-    <h2>Histórico dos festivais</h2>
-    <div class="hint">Aqui sua mãe só precisa registrar o que realmente aconteceu. O aplicativo faz as contas e mostra se o resultado está melhorando ou piorando.</div>
-  </div>
-  <div class="card">
-    <div class="section-title">Novo festival</div>
-    <div class="grid">
-      <div><label>Data</label><input id="hDate" type="date"></div>
-      <div><label>Fatias levadas</label><input id="hTaken" type="number" value="80"></div>
-      <div><label>Fatias vendidas</label><input id="hSold" type="number"></div>
-      <div><label>Preço por fatia</label><input id="hPrice" type="number" step=".01" value="20"></div>
-      <div><label>Custo total dos bolos</label><input id="hCakeCost" type="number" step=".01" value="475"></div>
-      <div><label>Outros custos</label><input id="hExtra" type="number" step=".01" value="62"></div>
+    <div class="tabs">
+        <button class="tab-btn" id="tab-historico" onclick="switchTab('historico')">Histórico</button>
+        <button class="tab-btn active" id="tab-simulador" onclick="switchTab('simulador')">Simulador</button>
     </div>
-    <div style="margin-top:10px"><label>Observação</label><input id="hNote" placeholder="Ex.: vendeu muito, sobrou bolo, Uber mais caro..."></div>
-    <button class="primary" onclick="addHistory()">Salvar festival</button>
-  </div>
 
-  <div class="card">
-    <div class="section-title">Resumo real dos festivais</div>
-    <div class="kpis">
-      <div class="kpi"><small>Festivais</small><strong id="sCount">0</strong></div>
-      <div class="kpi"><small>Faturamento total</small><strong id="sRev">R$ 0</strong></div>
-      <div class="kpi"><small>Lucro total</small><strong id="sProfit">R$ 0</strong></div>
-      <div class="kpi"><small>Lucro médio</small><strong id="sAvg">R$ 0</strong></div>
+    <!-- ABA SIMULADOR -->
+    <div id="simulador" class="container active">
+        
+        <div class="card">
+            <h2>1. Produção e Custos Base</h2>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Custo médio 1 bolo (R$)</label>
+                    <input type="number" id="sim-custo-bolo" value="95" oninput="calcularSimulador()">
+                </div>
+                <div class="form-group">
+                    <label>Qtd. de bolos</label>
+                    <input type="number" id="sim-qtd-bolos" value="5" oninput="calcularSimulador()">
+                </div>
+                <div class="form-group">
+                    <label>Fatias por bolo</label>
+                    <input type="number" id="sim-fatias-bolo" value="16" oninput="calcularSimulador()">
+                </div>
+                <div class="form-group">
+                    <label>Preço de Venda (R$)</label>
+                    <input type="number" id="sim-preco" value="20" oninput="calcularSimulador()">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Perda (Fatias não vendidas em %)</label>
+                <input type="number" id="sim-perda" value="30" oninput="calcularSimulador()">
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>2. Custos Adicionais do Festival</h2>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Energia/Gás (R$)</label>
+                    <input type="number" id="sim-energia" value="12" oninput="calcularSimulador()">
+                </div>
+                <div class="form-group">
+                    <label>Transporte/Uber (R$)</label>
+                    <input type="number" id="sim-transporte" value="50" oninput="calcularSimulador()">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Outros Custos (R$)</label>
+                <input type="number" id="sim-outros" value="0" oninput="calcularSimulador()">
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Resultados do Cenário</h2>
+            <div class="result-row">
+                <span class="result-label">Fatias Produzidas</span>
+                <span class="result-value" id="res-fatias-prod">80</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Fatias Vendidas</span>
+                <span class="result-value" id="res-fatias-vend">56</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Custo dos Bolos</span>
+                <span class="result-value" id="res-custo-bolos">R$ 475,00</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Custo Total do Festival</span>
+                <span class="result-value" id="res-custo-total">R$ 537,00</span>
+            </div>
+            <div class="result-row" style="background: #f8fafc; padding: 8px; border-radius: 8px; margin: 8px 0;">
+                <span class="result-label">Custo Efetivo por Fatia Vendida</span>
+                <span class="result-value" id="res-custo-efetivo">R$ 9,59</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Faturamento</span>
+                <span class="result-value" id="res-faturamento">R$ 1.120,00</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Margem</span>
+                <span class="result-value" id="res-margem">52,05%</span>
+            </div>
+            <div style="text-align: center; margin-top: 16px; padding-top: 16px; border-top: 2px solid var(--primary-light);">
+                <span class="result-label">LUCRO ESTIMADO</span><br>
+                <span class="highlight" id="res-lucro">R$ 583,00</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Cálculo Reverso de Preço (Margem)</h2>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">Preço necessário para atingir a margem desejada (considerando custo efetivo de <span id="lbl-custo-efetivo">R$ 9,59</span>):</p>
+            <div class="result-row"><span class="result-label">Margem de 30%</span><span class="result-value" id="rev-30">R$ 13,70</span></div>
+            <div class="result-row"><span class="result-label">Margem de 40%</span><span class="result-value" id="rev-40">R$ 15,98</span></div>
+            <div class="result-row"><span class="result-label">Margem de 50%</span><span class="result-value" id="rev-50">R$ 19,18</span></div>
+            <div class="result-row"><span class="result-label">Margem de 60%</span><span class="result-value" id="rev-60">R$ 23,98</span></div>
+            <div class="result-row"><span class="result-label">Margem de 70%</span><span class="result-value" id="rev-70">R$ 31,97</span></div>
+        </div>
+
+        <div class="card">
+            <h2>Cenário 100% de Venda (Sem perdas)</h2>
+            <div class="result-row"><span class="result-label">Faturamento Potencial</span><span class="result-value" id="cen-fat">R$ 1.600,00</span></div>
+            <div class="result-row"><span class="result-label">Lucro Potencial</span><span class="result-value success" id="cen-lucro">R$ 1.063,00</span></div>
+            <div class="result-row"><span class="result-label" style="color: var(--danger)">Dinheiro deixado na mesa</span><span class="result-value danger" id="cen-perda">R$ 480,00</span></div>
+        </div>
+
+        <div class="card">
+            <h2>Projeção Mensal</h2>
+            <div class="form-group">
+                <label>Quantos festivais por mês?</label>
+                <input type="number" id="sim-mes-qtd" value="6" oninput="calcularSimulador()">
+            </div>
+            <div class="result-row"><span class="result-label">Faturamento Mensal</span><span class="result-value" id="mes-fat">R$ 6.720,00</span></div>
+            <div class="result-row"><span class="result-label">Lucro Mensal</span><span class="result-value highlight" style="font-size: 20px;" id="mes-lucro">R$ 3.498,00</span></div>
+            
+            <div style="background: var(--primary-light); padding: 16px; border-radius: 12px; margin-top: 16px; text-align: center;">
+                <span class="result-label">Para atingir <b>R$ 3.000</b> de lucro, você precisa de:</span><br>
+                <span class="highlight" style="font-size: 20px;" id="mes-meta">6 festivais</span>
+            </div>
+        </div>
     </div>
-    <div style="margin-top:14px" class="row"><span>Taxa média de venda</span><b id="sSell">0%</b></div>
-    <div class="row"><span>Margem média</span><b id="sMargin">0%</b></div>
-    <div class="row"><span>Último resultado</span><b id="sLast">-</b></div>
-    <div class="row"><span>Tendência recente</span><b id="sTrend">-</b></div>
-  </div>
 
-  <div class="card">
-    <div class="section-title">Registros</div>
-    <div class="filter"><input id="search" placeholder="Filtrar por observação ou data..." oninput="renderHistory()"><button class="secondary" onclick="exportCSV()">Exportar</button></div>
-    <div id="historyList"></div>
-    <button class="secondary danger" style="width:100%;margin-top:12px" onclick="clearHistory()">Apagar histórico</button>
-  </div>
-</section>
-</main>
-</div>
+    <!-- ABA HISTÓRICO -->
+    <div id="historico" class="container">
+        
+        <div class="stat-box dark">
+            <div class="stat-label">Lucro Total Acumulado</div>
+            <div class="stat-value" id="hist-lucro-total">R$ 0,00</div>
+        </div>
 
-<script>
-const BRL=v=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(Number(v)||0);
-const pct=v=>(Number(v)||0).toFixed(1)+'%';
-const val=id=>Number(document.getElementById(id).value)||0;
-function saveSim(){const ids=['cake','cakes','slices','loss','price','monthly','utilities','transport','other'];let o={};ids.forEach(id=>o[id]=document.getElementById(id).value);localStorage.setItem('la_sim',JSON.stringify(o))}
-function loadSim(){try{const o=JSON.parse(localStorage.getItem('la_sim')||'{}');Object.keys(o).forEach(id=>{if(document.getElementById(id))document.getElementById(id).value=o[id]})}catch(e){}}
-function calc(){
- saveSim();
- const cake=val('cake'),cakes=val('cakes'),slices=val('slices'),loss=Math.max(0,Math.min(100,val('loss'))),price=val('price'),monthly=val('monthly'),utilities=val('utilities'),transport=val('transport'),other=val('other');
- const prod=cakes*slices,sold=Math.round(prod*(1-loss/100)),unsold=prod-sold,cost=cake*cakes+utilities+transport+other,rev=sold*price,profit=rev-cost,margin=rev?profit/rev*100:0,unit=sold?cost/sold:0;
- document.getElementById('rCost').textContent=BRL(cost);document.getElementById('rRev').textContent=BRL(rev);document.getElementById('rProfit').textContent=BRL(profit);document.getElementById('rMargin').textContent=pct(margin);
- document.getElementById('rProd').textContent=prod;document.getElementById('rSold').textContent=sold;document.getElementById('rUnsold').textContent=unsold;document.getElementById('rUnit').textContent=BRL(unit);
- document.getElementById('mPer').textContent=BRL(profit);document.getElementById('mProfit').textContent=BRL(profit*monthly);document.getElementById('mRev').textContent=BRL(rev*monthly);document.getElementById('m3000').textContent=profit>0?Math.ceil(3000/profit):'—';
- document.getElementById('cCake').textContent=BRL(cake*cakes);document.getElementById('cUtil').textContent=BRL(utilities);document.getElementById('cTrans').textContent=BRL(transport);document.getElementById('cOther').textContent=BRL(other);
- document.getElementById('rProfit').className=profit>=0?'good':'bad';document.getElementById('rMargin').className=margin>=0?'good':'bad';
-}
-function showTab(t){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(t).classList.add('active');document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',(t==='sim'?i===0:i===1)));if(t==='hist')renderHistory()}
-function getHist(){try{return JSON.parse(localStorage.getItem('la_hist')||'[]')}catch(e){return[]}}
-function addHistory(){
- const date=document.getElementById('hDate').value||new Date().toISOString().slice(0,10),taken=val('hTaken'),sold=val('hSold'),price=val('hPrice'),cakeCost=val('hCakeCost'),extra=val('hExtra');
- if(!taken||sold<0){alert('Preencha a quantidade de fatias levadas.');return}
- const rec={id:Date.now(),date,taken,sold,price,cakeCost,extra,note:document.getElementById('hNote').value.trim()};
- let h=getHist();h.unshift(rec);localStorage.setItem('la_hist',JSON.stringify(h));document.getElementById('hSold').value='';document.getElementById('hNote').value='';renderHistory();
-}
-function renderHistory(){
- const h=getHist(),q=(document.getElementById('search')?.value||'').toLowerCase();const filtered=h.filter(r=>(r.date+' '+r.note).toLowerCase().includes(q));
- let rev=0,profit=0,sell=0,margin=0;h.forEach(r=>{const c=Number(r.cakeCost)+Number(r.extra),rv=Number(r.sold)*Number(r.price),p=rv-c;rev+=rv;profit+=p;sell+=r.taken?r.sold/r.taken*100:0;margin+=rv?p/rv*100:0});
- document.getElementById('sCount').textContent=h.length;document.getElementById('sRev').textContent=BRL(rev);document.getElementById('sProfit').textContent=BRL(profit);document.getElementById('sAvg').textContent=BRL(h.length?profit/h.length:0);document.getElementById('sSell').textContent=pct(h.length?sell/h.length:0);document.getElementById('sMargin').textContent=pct(h.length?margin/h.length:0);
- if(h.length){const latest=h[0],lp=latest.sold*latest.price-(Number(latest.cakeCost)+Number(latest.extra));document.getElementById('sLast').textContent=BRL(lp);if(h.length>=2){const prev=h[1],pp=prev.sold*prev.price-(Number(prev.cakeCost)+Number(prev.extra));document.getElementById('sTrend').textContent=lp>pp?'Melhor que o anterior ↑':lp<pp?'Pior que o anterior ↓':'Igual ao anterior →';document.getElementById('sTrend').className=lp>=pp?'good':'bad'}}else{document.getElementById('sLast').textContent='-';document.getElementById('sTrend').textContent='-'}
- const box=document.getElementById('historyList');if(!filtered.length){box.innerHTML='<div class="empty">Nenhum festival registrado ainda.</div>';return}
- box.innerHTML=filtered.map(r=>{const cost=Number(r.cakeCost)+Number(r.extra),rv=Number(r.sold)*Number(r.price),p=rv-cost,rate=r.taken?r.sold/r.taken*100:0;return `<div class="festival"><div class="f-head"><div><div class="f-title">${formatDate(r.date)}</div><div class="f-date">${r.sold} de ${r.taken} fatias vendidas • ${pct(rate)} de venda</div></div><div class="profit ${p<0?'loss':''}">${BRL(p)}</div></div><div class="f-mini"><div class="mini"><small>Faturamento</small><b>${BRL(rv)}</b></div><div class="mini"><small>Custo</small><b>${BRL(cost)}</b></div><div class="mini"><small>Preço/fatia</small><b>${BRL(r.price)}</b></div><div class="mini"><small>Margem</small><b>${pct(rv?p/rv*100:0)}</b></div></div>${r.note?`<div class="note">${escapeHtml(r.note)}</div>`:''}</div>`}).join('');
-}
-function formatDate(s){const [y,m,d]=s.split('-');return `${d}/${m}/${y}`}
-function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function clearHistory(){if(confirm('Apagar todos os festivais registrados?')){localStorage.removeItem('la_hist');renderHistory()}}
-function exportCSV(){const h=getHist();if(!h.length){alert('Não há histórico para exportar.');return}let csv='Data;Fatias levadas;Fatias vendidas;Preço;Custo bolos;Outros custos;Faturamento;Lucro;Observação\n';h.forEach(r=>{const rv=r.sold*r.price,p=rv-(+r.cakeCost+ +r.extra);csv+=`${r.date};${r.taken};${r.sold};${r.price};${r.cakeCost};${r.extra};${rv};${p};"${r.note.replaceAll('"','""')}"\n`});const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));a.download='historico-lacos-de-acucar.csv';a.click()}
-document.querySelectorAll('#sim input').forEach(x=>x.addEventListener('input',calc));
-document.getElementById('hDate').value=new Date().toISOString().slice(0,10);loadSim();calc();renderHistory();
-</script>
+        <div class="grid-2 mb-3">
+            <div class="stat-box">
+                <div class="stat-label">Festivais</div>
+                <div class="stat-value" style="color: var(--primary);" id="hist-qtd-festivais">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Lucro Médio</div>
+                <div class="stat-value" style="color: var(--primary);" id="hist-lucro-medio">R$ 0,00</div>
+            </div>
+        </div>
+        <div class="grid-2 mb-3">
+            <div class="stat-box" style="padding: 12px;">
+                <div class="stat-label">Margem Média</div>
+                <div class="stat-value" style="color: var(--text-main); font-size: 18px;" id="hist-margem-media">0%</div>
+            </div>
+            <div class="stat-box" style="padding: 12px;">
+                <div class="stat-label">Taxa de Venda</div>
+                <div class="stat-value" style="color: var(--text-main); font-size: 18px;" id="hist-taxa-venda">0%</div>
+            </div>
+        </div>
+
+        <button class="btn-primary" style="margin: 20px 0;" onclick="abrirModal()">+ Registrar Festival</button>
+
+        <h3 style="margin-bottom: 16px; color: var(--text-muted); font-size: 16px;">Seus Festivais</h3>
+        <div id="lista-festivais">
+            <!-- Cards renderizados via JS -->
+        </div>
+
+    </div>
+
+    <!-- MODAL DE REGISTRO -->
+    <div class="modal-overlay" id="modal-registro">
+        <div class="modal" id="modal-content">
+            <div class="modal-header">
+                <h2>Registrar Festival</h2>
+                <button class="close-btn" onclick="fecharModal()">&times;</button>
+            </div>
+            
+            <div class="form-group">
+                <label>Data</label>
+                <input type="date" id="reg-data">
+            </div>
+            
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Fatias Levadas</label>
+                    <input type="number" id="reg-fatias-levadas" placeholder="Ex: 80">
+                </div>
+                <div class="form-group">
+                    <label>Fatias Vendidas</label>
+                    <input type="number" id="reg-fatias-vendidas" placeholder="Ex: 56">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Preço por Fatia (R$)</label>
+                <input type="number" id="reg-preco" placeholder="Ex: 20">
+            </div>
+
+            <h3 style="font-size: 16px; color: var(--primary); margin: 20px 0 12px 0;">Custos do Festival</h3>
+            
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Custo dos Bolos (R$)</label>
+                    <input type="number" id="reg-custo-bolos" placeholder="Ex: 475">
+                </div>
+                <div class="form-group">
+                    <label>Transporte (R$)</label>
+                    <input type="number" id="reg-transporte" placeholder="Ex: 50">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Outros Custos / Energia (R$)</label>
+                <input type="number" id="reg-outros" placeholder="Ex: 12">
+            </div>
+
+            <div class="form-group">
+                <label>Observação (Opcional)</label>
+                <input type="text" id="reg-obs" placeholder="Ex: Vendeu muito rápido, choveu...">
+            </div>
+
+            <button class="btn-primary" onclick="salvarFestival()">Salvar Festival</button>
+        </div>
+    </div>
+
+    <script>
+        // FORMATAÇÃO DE MOEDA
+        const formatMoney = (value) => {
+            return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        };
+
+        const formatPercent = (value) => {
+            return value.toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + '%';
+        };
+
+        // --- LÓGICA DO SIMULADOR ---
+        function calcularSimulador() {
+            // Entradas
+            const custoBolo = parseFloat(document.getElementById('sim-custo-bolo').value) || 0;
+            const qtdBolos = parseFloat(document.getElementById('sim-qtd-bolos').value) || 0;
+            const fatiasBolo = parseFloat(document.getElementById('sim-fatias-bolo').value) || 0;
+            const precoVenda = parseFloat(document.getElementById('sim-preco').value) || 0;
+            const perda = parseFloat(document.getElementById('sim-perda').value) || 0;
+            
+            const energia = parseFloat(document.getElementById('sim-energia').value) || 0;
+            const transporte = parseFloat(document.getElementById('sim-transporte').value) || 0;
+            const outros = parseFloat(document.getElementById('sim-outros').value) || 0;
+            
+            const qtdMes = parseFloat(document.getElementById('sim-mes-qtd').value) || 0;
+
+            // Cálculos Base
+            const fatiasProduzidas = qtdBolos * fatiasBolo;
+            const fatiasVendidas = Math.floor(fatiasProduzidas * (1 - (perda / 100)));
+            const custoBolosTotal = custoBolo * qtdBolos;
+            const custoTotalFestival = custoBolosTotal + energia + transporte + outros;
+            
+            const custoEfetivo = fatiasVendidas > 0 ? (custoTotalFestival / fatiasVendidas) : 0;
+            const faturamento = fatiasVendidas * precoVenda;
+            const lucro = faturamento - custoTotalFestival;
+            const margem = faturamento > 0 ? (lucro / faturamento) * 100 : 0;
+
+            // Atualiza UI Base
+            document.getElementById('res-fatias-prod').innerText = fatiasProduzidas;
+            document.getElementById('res-fatias-vend').innerText = fatiasVendidas;
+            document.getElementById('res-custo-bolos').innerText = formatMoney(custoBolosTotal);
+            document.getElementById('res-custo-total').innerText = formatMoney(custoTotalFestival);
+            document.getElementById('res-custo-efetivo').innerText = formatMoney(custoEfetivo);
+            document.getElementById('res-faturamento').innerText = formatMoney(faturamento);
+            document.getElementById('res-margem').innerText = formatPercent(margem);
+            document.getElementById('res-lucro').innerText = formatMoney(lucro);
+
+            // Cálculo Reverso
+            document.getElementById('lbl-custo-efetivo').innerText = formatMoney(custoEfetivo);
+            document.getElementById('rev-30').innerText = formatMoney(custoEfetivo / 0.70);
+            document.getElementById('rev-40').innerText = formatMoney(custoEfetivo / 0.60);
+            document.getElementById('rev-50').innerText = formatMoney(custoEfetivo / 0.50);
+            document.getElementById('rev-60').innerText = formatMoney(custoEfetivo / 0.40);
+            document.getElementById('rev-70').innerText = formatMoney(custoEfetivo / 0.30);
+
+            // Cenário 100%
+            const faturamento100 = fatiasProduzidas * precoVenda;
+            const lucro100 = faturamento100 - custoTotalFestival;
+            const dinheiroNaMesa = lucro100 - lucro;
+            
+            document.getElementById('cen-fat').innerText = formatMoney(faturamento100);
+            document.getElementById('cen-lucro').innerText = formatMoney(lucro100);
+            document.getElementById('cen-perda').innerText = formatMoney(dinheiroNaMesa);
+
+            // Mensal e Meta
+            const lucroMensal = lucro * qtdMes;
+            const faturamentoMensal = faturamento * qtdMes;
+            const festivaisParaMeta = lucro > 0 ? Math.ceil(3000 / lucro) : 0;
+
+            document.getElementById('mes-fat').innerText = formatMoney(faturamentoMensal);
+            document.getElementById('mes-lucro').innerText = formatMoney(lucroMensal);
+            document.getElementById('mes-meta').innerText = festivaisParaMeta > 0 ? `${festivaisParaMeta} festivais` : 'Lucro negativo';
+        }
+
+        // --- LÓGICA DE NAVEGAÇÃO ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.container').forEach(cont => cont.classList.remove('active'));
+            
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+
+            if(tabId === 'historico') {
+                renderizarHistorico();
+            }
+        }
+
+        // --- LÓGICA DO HISTÓRICO (LOCALSTORAGE) ---
+        let festivais = JSON.parse(localStorage.getItem('lacos_festivais')) || [];
+
+        function abrirModal() {
+            document.getElementById('reg-data').valueAsDate = new Date(); // Data de hoje como padrão
+            document.getElementById('modal-registro').style.display = 'flex';
+            setTimeout(() => document.getElementById('modal-content').classList.add('open'), 10);
+        }
+
+        function fecharModal() {
+            document.getElementById('modal-content').classList.remove('open');
+            setTimeout(() => document.getElementById('modal-registro').style.display = 'none', 300);
+            limparFormulario();
+        }
+
+        function limparFormulario() {
+            document.getElementById('reg-fatias-levadas').value = '';
+            document.getElementById('reg-fatias-vendidas').value = '';
+            document.getElementById('reg-preco').value = '';
+            document.getElementById('reg-custo-bolos').value = '';
+            document.getElementById('reg-transporte').value = '';
+            document.getElementById('reg-outros').value = '';
+            document.getElementById('reg-obs').value = '';
+        }
+
+        function salvarFestival() {
+            const dataStr = document.getElementById('reg-data').value;
+            const fatiasLevadas = parseInt(document.getElementById('reg-fatias-levadas').value) || 0;
+            const fatiasVendidas = parseInt(document.getElementById('reg-fatias-vendidas').value) || 0;
+            const preco = parseFloat(document.getElementById('reg-preco').value) || 0;
+            const custoBolos = parseFloat(document.getElementById('reg-custo-bolos').value) || 0;
+            const transporte = parseFloat(document.getElementById('reg-transporte').value) || 0;
+            const outros = parseFloat(document.getElementById('reg-outros').value) || 0;
+            const obs = document.getElementById('reg-obs').value;
+
+            if(!dataStr || fatiasLevadas === 0 || fatiasVendidas === 0) {
+                alert('Preencha pelo menos a data e as fatias.');
+                return;
+            }
+
+            const custoTotal = custoBolos + transporte + outros;
+            const faturamento = fatiasVendidas * preco;
+            const lucro = faturamento - custoTotal;
+            const margem = faturamento > 0 ? (lucro / faturamento) * 100 : 0;
+            const percVendido = (fatiasVendidas / fatiasLevadas) * 100;
+
+            const novoFestival = {
+                id: Date.now(),
+                data: dataStr,
+                fatiasLevadas,
+                fatiasVendidas,
+                preco,
+                custoTotal,
+                faturamento,
+                lucro,
+                margem,
+                percVendido,
+                obs
+            };
+
+            festivais.push(novoFestival);
+            // Ordenar por data mais recente
+            festivais.sort((a, b) => new Date(b.data) - new Date(a.data));
+            
+            localStorage.setItem('lacos_festivais', JSON.stringify(festivais));
+            
+            fecharModal();
+            renderizarHistorico();
+        }
+
+        function excluirFestival(id) {
+            if(confirm("Tem certeza que deseja apagar este festival?")) {
+                festivais = festivais.filter(f => f.id !== id);
+                localStorage.setItem('lacos_festivais', JSON.stringify(festivais));
+                renderizarHistorico();
+            }
+        }
+
+        function formatarData(dataISO) {
+            const partes = dataISO.split('-');
+            return `${partes[2]}/${partes[1]}/${partes[0]}`;
+        }
+
+        function renderizarHistorico() {
+            const lista = document.getElementById('lista-festivais');
+            lista.innerHTML = '';
+
+            if (festivais.length === 0) {
+                lista.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding: 20px;">Nenhum festival registrado ainda.</p>';
+                atualizarResumo();
+                return;
+            }
+
+            festivais.forEach((fest, index) => {
+                // Verificar evolução em relação ao festival anterior (que no array cronológico inverso é o index + 1)
+                let badgeEvolucao = '';
+                if (index < festivais.length - 1) {
+                    const lucroAnterior = festivais[index + 1].lucro;
+                    if (fest.lucro > lucroAnterior) {
+                        badgeEvolucao = `<div class="trend-up">↑ Melhor que o anterior (${formatMoney(fest.lucro - lucroAnterior)})</div>`;
+                    } else if (fest.lucro < lucroAnterior) {
+                        badgeEvolucao = `<div class="trend-down">↓ Pior que o anterior (${formatMoney(fest.lucro - lucroAnterior)})</div>`;
+                    }
+                }
+
+                const card = document.createElement('div');
+                card.className = 'card history-card';
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <div class="history-date">${formatarData(fest.data)}</div>
+                            <div class="history-title">${fest.fatiasVendidas} de ${fest.fatiasLevadas} fatias (${formatPercent(fest.percVendido)} vendidas)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="result-row"><span class="result-label">Faturamento</span><span class="result-value">${formatMoney(fest.faturamento)}</span></div>
+                    <div class="result-row"><span class="result-label">Custo</span><span class="result-value">${formatMoney(fest.custoTotal)}</span></div>
+                    <div class="result-row"><span class="result-label">Margem</span><span class="result-value">${formatPercent(fest.margem)}</span></div>
+                    
+                    <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-weight: bold; color: var(--text-muted);">LUCRO</span>
+                            <span class="highlight" style="font-size: 20px;">${formatMoney(fest.lucro)}</span>
+                        </div>
+                        ${badgeEvolucao}
+                    </div>
+                    
+                    ${fest.obs ? `<div style="margin-top: 12px; background: #f9fafb; padding: 10px; border-radius: 8px; font-size: 14px; font-style: italic; color: var(--text-muted);">"${fest.obs}"</div>` : ''}
+                    
+                    <button class="btn-danger" style="margin-top: 12px;" onclick="excluirFestival(${fest.id})">Excluir Registro</button>
+                `;
+                lista.appendChild(card);
+            });
+
+            atualizarResumo();
+        }
+
+        function atualizarResumo() {
+            if (festivais.length === 0) {
+                document.getElementById('hist-lucro-total').innerText = 'R$ 0,00';
+                document.getElementById('hist-qtd-festivais').innerText = '0';
+                document.getElementById('hist-lucro-medio').innerText = 'R$ 0,00';
+                document.getElementById('hist-margem-media').innerText = '0%';
+                document.getElementById('hist-taxa-venda').innerText = '0%';
+                return;
+            }
+
+            let lucroTotal = 0;
+            let faturamentoTotal = 0;
+            let fatiasVendidasTotal = 0;
+            let fatiasLevadasTotal = 0;
+
+            festivais.forEach(f => {
+                lucroTotal += f.lucro;
+                faturamentoTotal += f.faturamento;
+                fatiasVendidasTotal += f.fatiasVendidas;
+                fatiasLevadasTotal += f.fatiasLevadas;
+            });
+
+            const lucroMedio = lucroTotal / festivais.length;
+            const margemMedia = faturamentoTotal > 0 ? (lucroTotal / faturamentoTotal) * 100 : 0;
+            const taxaVendaMedia = fatiasLevadasTotal > 0 ? (fatiasVendidasTotal / fatiasLevadasTotal) * 100 : 0;
+
+            document.getElementById('hist-lucro-total').innerText = formatMoney(lucroTotal);
+            document.getElementById('hist-qtd-festivais').innerText = festivais.length;
+            document.getElementById('hist-lucro-medio').innerText = formatMoney(lucroMedio);
+            document.getElementById('hist-margem-media').innerText = formatPercent(margemMedia);
+            document.getElementById('hist-taxa-venda').innerText = formatPercent(taxaVendaMedia);
+        }
+
+        // Inicialização
+        calcularSimulador();
+        switchTab('simulador'); // Começa no simulador
+        renderizarHistorico();
+
+    </script>
 </body>
 </html>
