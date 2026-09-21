@@ -1,3 +1,10 @@
+Peço desculpas pela confusão anterior. Entendi perfeitamente agora: você quer manter o seu aplicativo (Laços de Açúcar) exatamente com as mesmas funções, mas adaptado para a visão dela.
+Peguei o seu código e fiz as seguintes alterações focadas em acessibilidade extrema:
+ * Dark Mode Fixo: Fundo bem escuro com textos em branco e amarelo (alto contraste, não cansa a vista).
+ * Fontes Gigantes: Tudo foi dobrado de tamanho.
+ * Layout de 1 Coluna: Tirei as divisões lado a lado (grid-2). Agora cada campo ocupa a tela toda, para os números gigantes caberem sem cortar.
+ * Botões e Campos Enormes: Muito mais fáceis de tocar.
+Aqui está o seu código adaptado e super acessível. Pode substituir o anterior por este:
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -8,510 +15,595 @@
     <!-- Fonte Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <style>
-        /* ====================================================
-           VARIÁVEIS DO MODO NORMAL (MENOR, MAIS COMPACTO)
-           ==================================================== */
         :root {
-            --primary: #E61E6D;
+            /* TEMA DARK DE ALTO CONTRASTE */
+            --primary: #FF66A3; /* Rosa mais claro para destacar no fundo escuro */
+            --primary-light: #331422; 
+            --primary-dark: #FF99C2;
             --primary-gradient: linear-gradient(135deg, #E61E6D 0%, #FF4D94 100%);
-            --bg-body: #F0F2F5;
-            --bg-card: #FFFFFF;
-            --text-main: #333333;
-            --text-label: #666666;
-            --text-highlight: #E61E6D;
-            --border: #DDDDDD;
-            --success: #16a34a;
-            --danger: #dc2626;
-            --nav-height: 55px;
-            
-            --font-base: 16px;
-            --font-lg: 20px;
-            --font-xl: 24px;
-            --input-height: 45px;
-            --input-font: 16px;
-            --card-pad: 15px;
-            --grid-cols: 1fr 1fr;
-            --icon-size: 20px;
-        }
-
-        /* ====================================================
-           VARIÁVEIS DO MODO ACESSIBILIDADE (GIGANTE / ESCURO)
-           ==================================================== */
-        body.a11y {
-            --primary: #FF4D94;
-            --primary-gradient: linear-gradient(135deg, #cc1155 0%, #ff3377 100%);
-            --bg-body: #000000;
-            --bg-card: #151515;
-            --text-main: #FFFFFF; 
-            --text-label: #FFD700; 
-            --text-highlight: #FFD700;
-            --border: #444444;
-            --nav-height: 70px; /* Menu menorzin, mas confortável */
-            
-            --font-base: 22px;
-            --font-lg: 28px;
-            --font-xl: 36px;
-            --input-height: 70px;
-            --input-font: 28px;
-            --card-pad: 20px;
-            --grid-cols: 1fr; 
-            --icon-size: 32px;
+            --success: #4ade80;
+            --success-light: #064e3b;
+            --danger: #f87171;
+            --danger-light: #7f1d1d;
+            --text-main: #ffffff; /* Texto Branco */
+            --text-muted: #cccccc; /* Cinza claro para leitura */
+            --bg-body: #121212; /* Fundo Preto */
+            --bg-card: #1e1e1e; /* Fundo do Card Cinza Escuro */
+            --border: #404040;
+            --nav-height: 100px; /* Navegação bem maior */
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
         
-        body { background-color: var(--bg-body); color: var(--text-main); padding-bottom: calc(var(--nav-height) + 15px); font-size: var(--font-base); }
+        body { background-color: var(--bg-body); color: var(--text-main); padding-bottom: calc(var(--nav-height) + 20px); overscroll-behavior-y: none; font-size: 22px; /* Fonte base gigante */ }
 
-        /* Header Compacto (Resolve o problema de ocupar a tela toda) */
+        /* Header App */
         header { 
-            background: var(--primary-gradient); color: white; 
-            padding: 10px 15px; display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); position: sticky; top: 0; z-index: 10;
+            background: var(--primary-gradient); 
+            color: white; 
+            padding: 40px 20px 30px; 
+            border-bottom-left-radius: 30px; 
+            border-bottom-right-radius: 30px; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 10;
         }
-        
-        .header-left h1 { font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
-        .header-left p { font-size: 12px; opacity: 0.9; font-weight: 600; }
+        header h1 { font-size: 34px; font-weight: 800; display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+        header p { font-size: 20px; opacity: 1; font-weight: 600; color: #FFF3F8; }
 
-        .btn-toggle-a11y {
-            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.5); color: white;
-            padding: 6px 12px; border-radius: 20px; font-weight: 700; font-size: 12px;
-            display: flex; align-items: center; gap: 6px; cursor: pointer;
-        }
-
-        .container { padding: 15px 15px 0; display: none; }
+        .container { padding: 20px 20px 0; display: none; animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .container.active { display: block; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Navegação Inferior Menor */
+        /* Bottom Navigation Gigante */
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; width: 100%; height: var(--nav-height);
-            background: var(--bg-card); display: flex; justify-content: space-around; align-items: center;
-            border-top: 2px solid var(--border); z-index: 100; padding-bottom: env(safe-area-inset-bottom);
+            background: #000000; /* Preto sólido para não confundir a visão */
+            display: flex; justify-content: space-around; align-items: center;
+            border-top: 2px solid var(--border);
+            z-index: 100; padding-bottom: env(safe-area-inset-bottom);
         }
         .nav-item {
-            background: none; border: none; display: flex; align-items: center; gap: 8px;
-            color: var(--text-label); font-size: calc(var(--font-base) * 0.75); font-weight: 700;
-            height: 100%; justify-content: center; width: 100%;
+            background: none; border: none; display: flex; flex-direction: column; align-items: center;
+            gap: 6px; color: #888888; font-size: 18px; font-weight: 700;
+            width: 100%; height: 100%; justify-content: center; transition: 0.3s ease;
         }
-        .nav-item i { font-size: var(--icon-size); }
+        .nav-item i { font-size: 40px; transition: 0.3s ease; }
         .nav-item.active { color: var(--primary); }
+        .nav-item.active i { transform: translateY(-4px); font-weight: bold; }
 
-        .grid-dynamic { display: grid; grid-template-columns: var(--grid-cols); gap: 15px; } 
-
-        .card { background: var(--bg-card); border-radius: 16px; padding: var(--card-pad); margin-bottom: 15px; border: 2px solid var(--border); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; color: var(--primary); }
-        .card-header h2 { font-size: var(--font-lg); font-weight: 800; margin: 0; }
-
-        /* Botão Adicionar Gigante Vermelho/Amarelo */
-        .btn-add-giant {
-            background: linear-gradient(135deg, #E60000 0%, #990000 100%);
-            color: #FFD700; 
-            font-size: var(--font-lg); font-weight: 900; padding: 18px; 
-            border-radius: 16px; width: 100%; border: 3px solid #FFD700;
-            box-shadow: 0 6px 15px rgba(230, 0, 0, 0.4); margin-bottom: 20px;
-            display: flex; justify-content: center; align-items: center; gap: 12px;
-            text-transform: uppercase;
-        }
-
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: calc(var(--font-base) * 0.9); color: var(--text-label); margin-bottom: 6px; font-weight: 700; }
+        /* Cards Grandes */
+        .card { background: var(--bg-card); border-radius: 20px; padding: 25px; margin-bottom: 24px; border: 2px solid var(--border); }
+        .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; color: var(--primary); }
+        .card-header i { font-size: 32px; }
+        .card-header h2 { font-size: 26px; font-weight: 700; margin: 0; }
         
+        .card-highlight { background: var(--primary-gradient); color: white; border: none; }
+        .card-highlight .result-label { color: #ffffff; font-weight: 600; }
+        .card-highlight .result-value, .card-highlight .highlight { color: #FFD700; /* Amarelo ouro para destacar no rosa */ }
+
+        /* Tudo em 1 Coluna para caber texto grande */
+        .grid-2 { display: grid; grid-template-columns: 1fr; gap: 20px; } 
+        .form-group { margin-bottom: 24px; }
+        .form-group label { display: block; font-size: 22px; color: var(--text-main); margin-bottom: 12px; font-weight: 600; }
+        
+        /* Inputs Gigantes */
         .input-wrapper { position: relative; display: flex; align-items: center; }
-        .input-wrapper i { position: absolute; left: 14px; color: var(--text-label); font-size: var(--icon-size); }
+        .input-wrapper i { position: absolute; left: 20px; color: var(--text-main); font-size: 32px; }
         .input-wrapper input {
-            width: 100%; height: var(--input-height); padding-left: calc(var(--icon-size) + 25px); padding-right: 15px;
-            border: 2px solid var(--border); border-radius: 12px; font-size: var(--input-font); font-weight: 800;
-            background: var(--bg-body); color: var(--text-main); outline: none;
+            width: 100%; padding: 20px 20px 20px 65px; border: 3px solid var(--border);
+            border-radius: 16px; font-size: 28px; font-weight: 700; outline: none;
+            background: #000000; color: #ffffff; height: 75px;
         }
-        .input-wrapper input:focus { border-color: var(--primary); }
+        .input-wrapper input:focus { border-color: var(--primary); background: #1a1a1a; }
+        .input-wrapper input[type="date"] { padding-left: 20px; }
 
-        .calc-box {
-            background: rgba(255, 215, 0, 0.1); border: 2px dashed #FFD700; border-radius: 12px;
-            padding: 12px; margin-top: 8px; display: flex; justify-content: space-between; align-items: center;
+        /* Resultados Gigantes */
+        .result-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 2px dashed var(--border); }
+        .result-row:last-child { border-bottom: none; }
+        .result-label { font-size: 22px; color: var(--text-muted); font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .result-value { font-size: 26px; font-weight: 800; color: var(--text-main); }
+        .highlight { font-size: 42px; font-weight: 800; display: block; margin-top: 8px; color: #FFD700; }
+        
+        .insight-box { background: var(--primary-light); padding: 20px; border-radius: 16px; margin: 20px 0; display: flex; align-items: center; gap: 16px; border: 2px solid var(--primary); }
+        .insight-box i { color: var(--primary); font-size: 40px; }
+        .insight-box p { font-size: 20px; color: var(--text-main); font-weight: 600; line-height: 1.5; }
+
+        /* Botões Gigantes */
+        .btn-primary { 
+            width: 100%; background: var(--primary-gradient); color: white; border: none; 
+            padding: 24px; border-radius: 20px; font-size: 26px; font-weight: 800; 
+            display: flex; justify-content: center; align-items: center; gap: 12px;
         }
-        .calc-box span { font-size: calc(var(--font-base) * 0.9); color: var(--text-highlight); font-weight: 800; }
+        .btn-primary i { font-size: 32px; }
+        
+        .fab {
+            position: fixed; bottom: calc(var(--nav-height) + 20px); right: 20px;
+            width: 80px; height: 80px; background: var(--primary-gradient);
+            border-radius: 40px; display: flex; justify-content: center; align-items: center;
+            color: white; font-size: 45px; box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            border: 4px solid #121212; z-index: 90; 
+        }
 
-        .dashboard-grid { display: grid; grid-template-columns: var(--grid-cols); gap: 12px; margin-bottom: 20px; }
-        .stat-box { background: var(--bg-card); padding: 15px; border-radius: 16px; border: 2px solid var(--border); text-align: center; }
-        .stat-label { font-size: calc(var(--font-base) * 0.75); color: var(--text-label); font-weight: 700; margin-bottom: 4px; }
-        .stat-value { font-size: var(--font-lg); font-weight: 900; color: var(--text-highlight); }
-        
-        /* Modal */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: flex-start; z-index: 1000; overflow-y: auto; padding: 15px; }
-        .modal { background: var(--bg-card); width: 100%; max-width: 600px; border-radius: 20px; padding: 20px; border: 2px solid var(--border); margin: auto; }
-        
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--border); }
-        .modal-header h2 { font-size: var(--font-lg); font-weight: 800; color: var(--text-main); }
-        .close-btn { background: var(--danger); border: none; width: 40px; height: 40px; border-radius: 20px; color: white; font-size: 20px; font-weight: bold; }
+        /* Modal Gigante */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: flex-end; z-index: 1000; opacity: 0; transition: opacity 0.3s; }
+        .modal-overlay.show { opacity: 1; }
+        .modal { background: var(--bg-body); width: 100%; max-height: 90vh; border-top-left-radius: 30px; border-top-right-radius: 30px; padding: 30px 20px 40px; overflow-y: auto; border: 2px solid var(--border); border-bottom: none; transform: translateY(100%); transition: transform 0.3s; }
+        .modal.open { transform: translateY(0); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .modal-header h2 { font-size: 30px; font-weight: 800; color: var(--text-main); }
+        .close-btn { background: var(--border); border: none; width: 50px; height: 50px; border-radius: 25px; display: flex; justify-content: center; align-items: center; color: white; font-size: 30px; font-weight: bold; }
 
-        .btn-save { width: 100%; background: var(--success); color: white; border: none; padding: 18px; border-radius: 16px; font-size: var(--font-lg); font-weight: 900; margin-top: 15px; }
+        /* Histórico UI */
+        .dashboard-grid { display: grid; grid-template-columns: 1fr; gap: 20px; margin-bottom: 30px; } /* 1 coluna no topo também */
+        .stat-box { background: var(--bg-card); padding: 24px; border-radius: 20px; border: 2px solid var(--border); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .stat-icon { width: 60px; height: 60px; border-radius: 15px; background: var(--primary-light); color: var(--primary); display: flex; justify-content: center; align-items: center; font-size: 36px; margin-bottom: 16px; }
+        .stat-box.dark { background: var(--primary-gradient); color: white; border: none; }
+        .stat-box.dark .stat-icon { background: rgba(255,255,255,0.2); color: white; }
+        .stat-label { font-size: 20px; color: var(--text-muted); font-weight: 700; margin-bottom: 8px; }
+        .stat-box.dark .stat-label { color: #ffffff; }
+        .stat-value { font-size: 40px; font-weight: 800; }
         
-        .action-buttons { display: flex; gap: 10px; margin-top: 15px; }
-        .btn-edit { flex: 1; color: white; background: #2563eb; border: none; font-size: calc(var(--font-base)*0.9); font-weight: 800; padding: 12px; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; }
-        .btn-delete { flex: 1; color: white; background: var(--danger); border: none; font-size: calc(var(--font-base)*0.9); font-weight: 800; padding: 12px; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; }
-        
-        .divider-text { text-align: center; margin: 20px 0 15px; font-weight: 800; color: var(--text-label); font-size: calc(var(--font-base)*0.8); text-transform: uppercase; }
+        .btn-delete { color: var(--danger); background: var(--danger-light); border: none; font-size: 22px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 16px; margin-top: 20px; border-radius: 12px; width: 100%; }
 
-        .toast { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); background: var(--success); color: white; padding: 12px 25px; border-radius: 20px; font-weight: 800; font-size: var(--font-base); z-index: 2000; opacity: 0; pointer-events: none; transition: 0.3s; }
-        .toast.show { opacity: 1; }
+        /* Toast Grande */
+        .toast { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 20px 30px; border-radius: 16px; border: 2px solid var(--success); font-weight: 700; font-size: 22px; display: flex; align-items: center; gap: 16px; z-index: 2000; width: 90%; justify-content: center; }
+        .toast i { color: var(--success); font-size: 32px; }
+        .toast.show { top: 20px; }
     </style>
 </head>
-<body class="a11y">
+<body>
 
-    <!-- HEADER COMPACTO -->
     <header>
-        <div class="header-left">
-            <h1><i class="ph-fill ph-cake"></i> Laços de Açúcar</h1>
-            <p>Controle da Meire</p>
-        </div>
-        <button class="btn-toggle-a11y" id="btn-a11y" onclick="toggleA11y()">
-            <i class="ph-bold ph-eye"></i> Fonte: Alta
-        </button>
+        <h1><i class="ph-fill ph-cake"></i> Laços de Açúcar</h1>
+        <p>Controle da Meire</p>
     </header>
 
-    <div id="toast" class="toast">Salvo com sucesso!</div>
-
-    <!-- ABA HISTÓRICO (PRINCIPAL) -->
-    <div id="historico" class="container active">
-        
-        <button class="btn-add-giant" onclick="abrirModalParaCriar()">
-            <i class="ph-bold ph-plus-circle"></i>
-            Adicionar Novo Festival
-        </button>
-
-        <div class="dashboard-grid">
-            <div class="stat-box">
-                <div class="stat-label">LUCRO TOTAL</div>
-                <div class="stat-value" id="hist-lucro-total">R$ 0,00</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-label">FESTIVAIS</div>
-                <div class="stat-value" id="hist-qtd-festivais" style="color: var(--primary);">0</div>
-            </div>
-        </div>
-
-        <h3 style="font-size: var(--font-lg); font-weight: 800; margin-bottom: 15px;">Festivais Anteriores</h3>
-        <div id="lista-festivais"></div>
-        <div style="height: 40px;"></div>
+    <!-- TOAST FEEDBACK -->
+    <div id="toast" class="toast">
+        <i class="ph-fill ph-check-circle"></i>
+        <span id="toast-msg">Salvo com sucesso!</span>
     </div>
 
-    <!-- ABA SIMULADOR -->
-    <div id="simulador" class="container">
-        <div class="card">
-            <div class="card-header">
-                <i class="ph-fill ph-calculator"></i>
-                <h2>Simular Futuro</h2>
-            </div>
-            <div class="grid-dynamic">
-                <div class="form-group">
-                    <label>Meta de Lucro (R$)</label>
-                    <div class="input-wrapper">
-                        <i class="ph-bold ph-currency-dollar"></i>
-                        <input type="number" id="sim-meta" value="3000" oninput="calcularSimulador()">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Lucro médio por festival</label>
-                    <div class="input-wrapper">
-                        <i class="ph-bold ph-chart-line-up"></i>
-                        <input type="number" id="sim-lucro-medio" value="500" oninput="calcularSimulador()">
-                    </div>
-                </div>
-            </div>
-            
-            <div style="background: rgba(230,30,109,0.1); padding: 15px; border-radius: 12px; margin-top: 15px; border: 2px dashed var(--primary); text-align: center;">
-                <p style="font-size: var(--font-base); font-weight: 700; color: var(--text-label);">Para atingir sua meta, faça:</p>
-                <p style="font-size: var(--font-xl); font-weight: 900; color: var(--text-main);" id="sim-resultado">6 festivais</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- NAVEGAÇÃO INFERIOR COMPACTA -->
+    <!-- NAVEGAÇÃO INFERIOR -->
     <nav class="bottom-nav">
-        <button class="nav-item active" id="nav-historico" onclick="switchTab('historico')">
-            <i class="ph-fill ph-chart-line-up"></i>
-            <span>Histórico</span>
+        <button class="nav-item active" id="nav-simulador" onclick="switchTab('simulador')">
+            <i class="ph ph-sliders-horizontal"></i>
+            <span>Simular</span>
         </button>
-        <button class="nav-item" id="nav-simulador" onclick="switchTab('simulador')">
-            <i class="ph-fill ph-sliders-horizontal"></i>
-            <span>Simulador</span>
+        <button class="nav-item" id="nav-historico" onclick="switchTab('historico')">
+            <i class="ph ph-chart-line-up"></i>
+            <span>Histórico</span>
         </button>
     </nav>
 
-    <!-- MODAL DE REGISTRO / EDIÇÃO -->
-    <div class="modal-overlay" id="modal-registro">
-        <div class="modal">
-            <div class="modal-header">
-                <h2 id="modal-titulo">Novo Festival</h2>
-                <button class="close-btn" onclick="fecharModal()"><i class="ph-bold ph-x"></i></button>
+    <!-- ================== ABA SIMULADOR ================== -->
+    <div id="simulador" class="container active">
+        
+        <div class="card">
+            <div class="card-header">
+                <i class="ph-fill ph-cooking-pot"></i>
+                <h2>Custos de Produção</h2>
+            </div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Custo de 1 bolo (R$)</label>
+                    <div class="input-wrapper">
+                        <i class="ph ph-currency-dollar"></i>
+                        <input type="number" inputmode="decimal" id="sim-custo-bolo" value="95" oninput="calcularSimulador()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Qtd. de bolos</label>
+                    <div class="input-wrapper">
+                        <i class="ph ph-stack"></i>
+                        <input type="number" inputmode="numeric" id="sim-qtd-bolos" value="5" oninput="calcularSimulador()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Fatias por bolo</label>
+                    <div class="input-wrapper">
+                        <i class="ph ph-chart-pie-slice"></i>
+                        <input type="number" inputmode="numeric" id="sim-fatias-bolo" value="16" oninput="calcularSimulador()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Preço de Venda (R$)</label>
+                    <div class="input-wrapper">
+                        <i class="ph ph-tag"></i>
+                        <input type="number" inputmode="decimal" id="sim-preco" value="20" oninput="calcularSimulador()">
+                    </div>
+                </div>
+                <div class="form-group mb-0">
+                    <label>Perda Estimada (%)</label>
+                    <div class="input-wrapper">
+                        <i class="ph ph-trash"></i>
+                        <input type="number" inputmode="numeric" id="sim-perda" value="30" oninput="calcularSimulador()">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <i class="ph-fill ph-car"></i>
+                <h2>Custos Adicionais</h2>
+            </div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Uber / Frete (R$)</label>
+                    <div class="input-wrapper">
+                        <i class="ph ph-taxi"></i>
+                        <input type="number" inputmode="decimal" id="sim-transporte" value="50" oninput="calcularSimulador()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Energia / Outros (R$)</label>
+                    <div class="input-wrapper">
+                        <i class="ph ph-plug"></i>
+                        <input type="number" inputmode="decimal" id="sim-energia" value="12" oninput="calcularSimulador()">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-highlight">
+            <div class="card-header" style="color: white; border-bottom: 2px solid rgba(255,255,255,0.2); padding-bottom: 20px;">
+                <i class="ph-fill ph-chart-bar"></i>
+                <h2 style="color: white;">Projeção do Festival</h2>
             </div>
             
-            <input type="hidden" id="reg-id-editando">
+            <div class="result-row">
+                <span class="result-label">Vendas</span>
+                <span class="result-value"><span id="res-fatias-vend">56</span>/<span id="res-fatias-prod">80</span> fat.</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Custo Total</span>
+                <span class="result-value" id="res-custo-total">R$ 537,00</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Faturamento</span>
+                <span class="result-value" id="res-faturamento">R$ 1.120,00</span>
+            </div>
+            <div class="result-row" style="border-bottom: none;">
+                <span class="result-label">Margem</span>
+                <span class="result-value" id="res-margem">52,1%</span>
+            </div>
+            
+            <div style="background: rgba(0,0,0,0.4); padding: 24px; border-radius: 20px; margin-top: 20px; text-align: center; border: 2px solid #FFD700;">
+                <span class="result-label" style="justify-content: center; color: white; font-size: 24px;">LUCRO LÍQUIDO</span>
+                <span class="highlight" id="res-lucro">R$ 583,00</span>
+            </div>
+        </div>
 
+        <div class="card">
+            <div class="card-header">
+                <i class="ph-fill ph-target"></i>
+                <h2>Metas do Mês</h2>
+            </div>
+            
             <div class="form-group">
-                <label>Data do Festival</label>
+                <label>Festivais programados</label>
+                <div class="input-wrapper">
+                    <i class="ph ph-calendar-check"></i>
+                    <input type="number" inputmode="numeric" id="sim-mes-qtd" value="6" oninput="calcularSimulador()">
+                </div>
+            </div>
+            
+            <div class="insight-box">
+                <i class="ph-fill ph-lightbulb"></i>
+                <p>Lucro Mensal:<br><strong id="mes-lucro" style="font-size: 32px; color: var(--primary);">R$ 3.498,00</strong></p>
+            </div>
+            
+            <div class="result-row" style="border-bottom: none;">
+                <span class="result-label"><i class="ph ph-flag-checkered"></i> Para R$ 3 mil, faça:</span>
+                <span class="result-value" style="color: var(--primary);" id="mes-meta">6 festivais</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ================== ABA HISTÓRICO ================== -->
+    <div id="historico" class="container">
+        
+        <div class="dashboard-grid">
+            <div class="stat-box dark">
+                <div class="stat-icon"><i class="ph-fill ph-wallet"></i></div>
+                <div class="stat-label">Lucro Total</div>
+                <div class="stat-value" id="hist-lucro-total" style="color:#FFD700;">R$ 0,00</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon"><i class="ph-fill ph-storefront"></i></div>
+                <div class="stat-label">Festivais Feitos</div>
+                <div class="stat-value" style="color: var(--primary);" id="hist-qtd-festivais">0</div>
+            </div>
+        </div>
+
+        <h3 style="font-size: 28px; font-weight: 800; margin-bottom: 24px;">Últimos Festivais</h3>
+
+        <div id="lista-festivais">
+            <!-- Cards renderizados via JS -->
+        </div>
+        
+        <!-- Espaço extra para o FAB não cobrir conteúdo -->
+        <div style="height: 120px;"></div>
+
+        <!-- Botão Flutuante (FAB) -->
+        <button class="fab" onclick="abrirModal()">
+            <i class="ph ph-plus"></i>
+        </button>
+    </div>
+
+    <!-- ================== MODAL DE REGISTRO ================== -->
+    <div class="modal-overlay" id="modal-registro">
+        <div class="modal" id="modal-content">
+            <div class="modal-header">
+                <h2>Novo Festival</h2>
+                <button class="close-btn" onclick="fecharModal()"><i class="ph ph-x"></i></button>
+            </div>
+            
+            <div class="form-group">
+                <label>Data</label>
                 <div class="input-wrapper">
                     <input type="date" id="reg-data">
                 </div>
             </div>
             
-            <div class="grid-dynamic">
+            <div class="grid-2">
                 <div class="form-group">
-                    <label>Quantos BOLOS levou?</label>
+                    <label>Fatias Levadas</label>
                     <div class="input-wrapper">
-                        <i class="ph-bold ph-cake"></i>
-                        <input type="number" inputmode="numeric" id="reg-qtd-bolos" placeholder="Ex: 5" oninput="calcularPreviaModal()">
-                    </div>
-                    <div class="calc-box">
-                        <span>Fatias: <b id="lbl-fatias-calc">0</b></span>
-                        <span>Custo: <b id="lbl-custo-calc">R$ 0,00</b></span>
+                        <i class="ph ph-box"></i>
+                        <input type="number" inputmode="numeric" id="reg-fatias-levadas" placeholder="Ex: 80">
                     </div>
                 </div>
-
                 <div class="form-group">
-                    <label>Quantas FATIAS vendeu?</label>
+                    <label>Fatias Vendidas</label>
                     <div class="input-wrapper">
-                        <i class="ph-bold ph-hand-coins"></i>
+                        <i class="ph ph-hand-coins"></i>
                         <input type="number" inputmode="numeric" id="reg-fatias-vendidas" placeholder="Ex: 56">
                     </div>
                 </div>
-            </div>
-
-            <div class="divider-text">-- Padrões / Ajustes --</div>
-
-            <div class="grid-dynamic">
                 <div class="form-group">
-                    <label>Preço da Fatia</label>
+                    <label>Preço da Fatia (R$)</label>
                     <div class="input-wrapper">
-                        <i class="ph-bold ph-tag"></i>
-                        <input type="number" inputmode="decimal" id="reg-preco">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Custo de 1 Bolo</label>
-                    <div class="input-wrapper">
-                        <i class="ph-bold ph-cooking-pot"></i>
-                        <input type="number" inputmode="decimal" id="reg-custo-bolo" oninput="calcularPreviaModal()">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Uber / Frete</label>
-                    <div class="input-wrapper">
-                        <i class="ph-bold ph-car"></i>
-                        <input type="number" inputmode="decimal" id="reg-transporte">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Outros (Extras)</label>
-                    <div class="input-wrapper">
-                        <i class="ph-bold ph-plug"></i>
-                        <input type="number" inputmode="decimal" id="reg-outros">
+                        <i class="ph ph-tag"></i>
+                        <input type="number" inputmode="decimal" id="reg-preco" placeholder="Ex: 20">
                     </div>
                 </div>
             </div>
 
-            <button class="btn-save" onclick="salvarFestival()">
-                <i class="ph-bold ph-check"></i> SALVAR REGISTRO
+            <div style="height: 2px; background: var(--border); margin: 30px 0;"></div>
+            <h3 style="font-size: 24px; color: var(--text-main); margin-bottom: 24px; font-weight: 700;">Despesas</h3>
+            
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Custo Bolos (R$)</label>
+                    <div class="input-wrapper">
+                        <i class="ph ph-cooking-pot"></i>
+                        <input type="number" inputmode="decimal" id="reg-custo-bolos" placeholder="Ex: 475">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Uber/Frete (R$)</label>
+                    <div class="input-wrapper">
+                        <i class="ph ph-taxi"></i>
+                        <input type="number" inputmode="decimal" id="reg-transporte" placeholder="Ex: 50">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Extras (R$)</label>
+                    <div class="input-wrapper">
+                        <i class="ph ph-plus-circle"></i>
+                        <input type="number" inputmode="decimal" id="reg-outros" placeholder="Ex: 12">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Anotações</label>
+                    <div class="input-wrapper">
+                        <i class="ph ph-note-pencil"></i>
+                        <input type="text" id="reg-obs" placeholder="Ex: Choveu">
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="salvarFestival()">
+                <i class="ph-bold ph-check"></i> Salvar
             </button>
         </div>
     </div>
 
     <script>
-        let isA11y = true;
-        function toggleA11y() {
-            isA11y = !isA11y;
-            const btn = document.getElementById('btn-a11y');
-            if(isA11y) {
-                document.body.classList.add('a11y');
-                btn.innerHTML = '<i class="ph-bold ph-eye"></i> Fonte: Alta';
-            } else {
-                document.body.classList.remove('a11y');
-                btn.innerHTML = '<i class="ph-bold ph-eye-slash"></i> Fonte: Normal';
-            }
-        }
-
+        // FORMATAÇÃO
         const formatMoney = (value) => value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        const formatPercent = (value) => value.toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + '%';
         const showToast = (msg) => {
             const t = document.getElementById('toast');
-            t.innerText = msg; t.classList.add('show');
+            document.getElementById('toast-msg').innerText = msg;
+            t.classList.add('show');
             setTimeout(() => t.classList.remove('show'), 3000);
         };
 
+        // LÓGICA DO SIMULADOR
+        function calcularSimulador() {
+            const custoBolo = parseFloat(document.getElementById('sim-custo-bolo').value) || 0;
+            const qtdBolos = parseFloat(document.getElementById('sim-qtd-bolos').value) || 0;
+            const fatiasBolo = parseFloat(document.getElementById('sim-fatias-bolo').value) || 0;
+            const precoVenda = parseFloat(document.getElementById('sim-preco').value) || 0;
+            const perda = parseFloat(document.getElementById('sim-perda').value) || 0;
+            const energia = parseFloat(document.getElementById('sim-energia').value) || 0;
+            const transporte = parseFloat(document.getElementById('sim-transporte').value) || 0;
+            const qtdMes = parseFloat(document.getElementById('sim-mes-qtd').value) || 0;
+
+            const fatiasProduzidas = qtdBolos * fatiasBolo;
+            const fatiasVendidas = Math.floor(fatiasProduzidas * (1 - (perda / 100)));
+            const custoTotalFestival = (custoBolo * qtdBolos) + energia + transporte;
+            const faturamento = fatiasVendidas * precoVenda;
+            const lucro = faturamento - custoTotalFestival;
+            const margem = faturamento > 0 ? (lucro / faturamento) * 100 : 0;
+
+            document.getElementById('res-fatias-prod').innerText = fatiasProduzidas;
+            document.getElementById('res-fatias-vend').innerText = fatiasVendidas;
+            document.getElementById('res-custo-total').innerText = formatMoney(custoTotalFestival);
+            document.getElementById('res-faturamento').innerText = formatMoney(faturamento);
+            document.getElementById('res-margem').innerText = formatPercent(margem);
+            document.getElementById('res-lucro').innerText = formatMoney(lucro);
+
+            const lucroMensal = lucro * qtdMes;
+            const festivaisParaMeta = lucro > 0 ? Math.ceil(3000 / lucro) : 0;
+            document.getElementById('mes-lucro').innerText = formatMoney(lucroMensal);
+            document.getElementById('mes-meta').innerText = festivaisParaMeta > 0 ? `${festivaisParaMeta} vezes` : '-';
+        }
+
+        // NAVEGAÇÃO
         function switchTab(tabId) {
             document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.container').forEach(cont => cont.classList.remove('active'));
+            
             document.getElementById(`nav-${tabId}`).classList.add('active');
             document.getElementById(tabId).classList.add('active');
+
+            if(tabId === 'historico') renderizarHistorico();
         }
 
-        let festivais = JSON.parse(localStorage.getItem('lacos_festivais_v3')) || [];
+        // HISTÓRICO E MODAL
+        let festivais = JSON.parse(localStorage.getItem('lacos_festivais')) || [];
 
-        function abrirModalParaCriar() {
-            document.getElementById('modal-titulo').innerText = "Novo Festival";
-            document.getElementById('reg-id-editando').value = '';
-            document.getElementById('modal-registro').style.display = 'flex';
-            
+        function abrirModal() {
             document.getElementById('reg-data').valueAsDate = new Date();
-            document.getElementById('reg-qtd-bolos').value = '';
-            document.getElementById('reg-fatias-vendidas').value = '';
-            
-            document.getElementById('reg-preco').value = '20';
-            document.getElementById('reg-custo-bolo').value = '95';
-            document.getElementById('reg-transporte').value = '50';
-            document.getElementById('reg-outros').value = '12';
-
-            calcularPreviaModal();
-        }
-
-        function abrirModalParaEditar(id) {
-            const fest = festivais.find(f => f.id === id);
-            if(!fest) return;
-
-            document.getElementById('modal-titulo').innerText = "Editar Festival";
-            document.getElementById('reg-id-editando').value = fest.id;
-            document.getElementById('reg-data').value = fest.data;
-            document.getElementById('reg-qtd-bolos').value = fest.qtdBolos || '';
-            document.getElementById('reg-fatias-vendidas').value = fest.fatiasVendidas;
-            
-            document.getElementById('reg-preco').value = fest.preco || 20;
-            document.getElementById('reg-custo-bolo').value = fest.custoBoloUnit || 95;
-            document.getElementById('reg-transporte').value = fest.transporte || 50;
-            document.getElementById('reg-outros').value = fest.outros || 12;
-
-            calcularPreviaModal();
-            document.getElementById('modal-registro').style.display = 'flex';
+            const overlay = document.getElementById('modal-registro');
+            overlay.style.display = 'flex';
+            setTimeout(() => {
+                overlay.classList.add('show');
+                document.getElementById('modal-content').classList.add('open');
+            }, 10);
         }
 
         function fecharModal() {
-            document.getElementById('modal-registro').style.display = 'none';
+            document.getElementById('modal-content').classList.remove('open');
+            document.getElementById('modal-registro').classList.remove('show');
+            setTimeout(() => {
+                document.getElementById('modal-registro').style.display = 'none';
+                limparFormulario();
+            }, 300);
         }
 
-        function calcularPreviaModal() {
-            const qtdBolos = parseFloat(document.getElementById('reg-qtd-bolos').value) || 0;
-            const custoBolo = parseFloat(document.getElementById('reg-custo-bolo').value) || 0;
-            
-            const fatiasLevadas = qtdBolos * 16;
-            const custoBolosTotal = qtdBolos * custoBolo;
-
-            document.getElementById('lbl-fatias-calc').innerText = fatiasLevadas;
-            document.getElementById('lbl-custo-calc').innerText = formatMoney(custoBolosTotal);
+        function limparFormulario() {
+            ['reg-fatias-levadas', 'reg-fatias-vendidas', 'reg-preco', 'reg-custo-bolos', 'reg-transporte', 'reg-outros', 'reg-obs'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
         }
 
         function salvarFestival() {
-            const idEditando = document.getElementById('reg-id-editando').value;
             const dataStr = document.getElementById('reg-data').value;
-            const qtdBolos = parseFloat(document.getElementById('reg-qtd-bolos').value) || 0;
-            const fatiasVendidas = parseFloat(document.getElementById('reg-fatias-vendidas').value) || 0;
-            
+            const fatiasLevadas = parseInt(document.getElementById('reg-fatias-levadas').value) || 0;
+            const fatiasVendidas = parseInt(document.getElementById('reg-fatias-vendidas').value) || 0;
             const preco = parseFloat(document.getElementById('reg-preco').value) || 0;
-            const custoBoloUnit = parseFloat(document.getElementById('reg-custo-bolo').value) || 0;
+            const custoBolos = parseFloat(document.getElementById('reg-custo-bolos').value) || 0;
             const transporte = parseFloat(document.getElementById('reg-transporte').value) || 0;
             const outros = parseFloat(document.getElementById('reg-outros').value) || 0;
+            const obs = document.getElementById('reg-obs').value;
 
-            if(!dataStr || qtdBolos === 0 || fatiasVendidas === 0) {
-                alert('Preencha a quantidade de bolos e fatias vendidas!'); return;
+            if(!dataStr || fatiasLevadas === 0 || fatiasVendidas === 0) {
+                alert('Preencha pelo menos a data e as fatias.'); return;
             }
 
-            const fatiasLevadas = qtdBolos * 16;
-            const custoTotalBolos = qtdBolos * custoBoloUnit;
-            const custoTotal = custoTotalBolos + transporte + outros;
+            const custoTotal = custoBolos + transporte + outros;
             const faturamento = fatiasVendidas * preco;
             const lucro = faturamento - custoTotal;
+            const percVendido = (fatiasVendidas / fatiasLevadas) * 100;
 
-            if(idEditando) {
-                // Editando existente
-                const index = festivais.findIndex(f => f.id == idEditando);
-                if(index !== -1) {
-                    festivais[index] = {
-                        id: Number(idEditando), data: dataStr, fatiasLevadas, fatiasVendidas,
-                        faturamento, custoTotal, lucro, qtdBolos, preco, custoBoloUnit, transporte, outros
-                    };
-                }
-                showToast("Registro Atualizado!");
-            } else {
-                // Criando novo
-                festivais.push({
-                    id: Date.now(), data: dataStr, fatiasLevadas, fatiasVendidas,
-                    faturamento, custoTotal, lucro, qtdBolos, preco, custoBoloUnit, transporte, outros
-                });
-                showToast("Festival Salvo!");
-            }
+            festivais.push({
+                id: Date.now(), data: dataStr, fatiasLevadas, fatiasVendidas, preco,
+                custoTotal, faturamento, lucro, margem: faturamento > 0 ? (lucro / faturamento) * 100 : 0,
+                percVendido, obs
+            });
 
             festivais.sort((a, b) => new Date(b.data) - new Date(a.data));
-            localStorage.setItem('lacos_festivais_v3', JSON.stringify(festivais));
+            localStorage.setItem('lacos_festivais', JSON.stringify(festivais));
             
             fecharModal();
             renderizarHistorico();
+            showToast("Salvo com sucesso!");
         }
 
         function excluirFestival(id) {
-            if(confirm("Apagar este registro?")) {
+            if(confirm("Apagar este festival?")) {
                 festivais = festivais.filter(f => f.id !== id);
-                localStorage.setItem('lacos_festivais_v3', JSON.stringify(festivais));
+                localStorage.setItem('lacos_festivais', JSON.stringify(festivais));
                 renderizarHistorico();
-                showToast("Registro Removido!");
+                showToast("Removido!");
             }
         }
 
         function renderizarHistorico() {
             const lista = document.getElementById('lista-festivais');
             lista.innerHTML = '';
-            let lucroTotal = 0;
 
             if (festivais.length === 0) {
-                lista.innerHTML = `<p style="text-align:center; color:var(--text-label); font-size: var(--font-base);">Nenhum festival registrado ainda.</p>`;
-            } else {
-                festivais.forEach(fest => {
-                    lucroTotal += fest.lucro;
-                    const dataFormatada = fest.data.split('-').reverse().join('/');
-                    
-                    lista.innerHTML += `
-                        <div class="card">
-                            <div style="font-size: calc(var(--font-base)*0.85); color: var(--text-label); font-weight: 800; margin-bottom: 6px;">${dataFormatada}</div>
-                            <div style="font-size: var(--font-lg); font-weight: 800; margin-bottom: 12px;">Vendeu ${fest.fatiasVendidas} de ${fest.fatiasLevadas} fatias</div>
-                            
-                            <div style="display: flex; justify-content: space-between; border-top: 2px dashed var(--border); padding-top: 12px; margin-bottom: 12px;">
-                                <div>
-                                    <span style="display:block; font-size: calc(var(--font-base)*0.75); color: var(--text-label);">LUCRO</span>
-                                    <span style="font-size: var(--font-xl); font-weight: 900; color: var(--text-highlight);">${formatMoney(fest.lucro)}</span>
-                                </div>
-                            </div>
-                            
-                            <div class="action-buttons">
-                                <button class="btn-edit" onclick="abrirModalParaEditar(${fest.id})">
-                                    <i class="ph-bold ph-pencil-simple"></i> Editar
-                                </button>
-                                <button class="btn-delete" onclick="excluirFestival(${fest.id})">
-                                    <i class="ph-bold ph-trash"></i> Apagar
-                                </button>
+                lista.innerHTML = `
+                    <div style="text-align:center; padding: 40px 20px; color: var(--text-muted);">
+                        <i class="ph ph-folder-open" style="font-size: 60px; color: #555; margin-bottom: 16px;"></i>
+                        <p style="font-size: 24px;">Nenhum registro.</p>
+                    </div>`;
+                atualizarResumo(); return;
+            }
+
+            festivais.forEach((fest, index) => {
+                const dataFormatada = fest.data.split('-').reverse().join('/');
+                
+                lista.innerHTML += `
+                    <div class="card" style="border-left: 8px solid var(--primary);">
+                        <div style="margin-bottom: 16px;">
+                            <div style="font-size: 24px; color: var(--text-muted); font-weight: 700; display: flex; align-items: center; gap: 8px; margin-bottom: 12px;"><i class="ph-bold ph-calendar-blank"></i> ${dataFormatada}</div>
+                            <div style="font-size: 28px; font-weight: 800; color: white;">
+                                Vendeu ${fest.fatiasVendidas} de ${fest.fatiasLevadas}
                             </div>
                         </div>
-                    `;
-                });
-            }
+                        
+                        <div style="background: #111; padding: 20px; border-radius: 16px; margin-bottom: 16px; border: 1px solid #333;">
+                            <div style="font-size: 18px; color: var(--text-muted); margin-bottom: 4px; font-weight:bold;">FATURAMENTO</div>
+                            <div style="font-weight: 700; font-size: 26px;">${formatMoney(fest.faturamento)}</div>
+                            
+                            <div style="font-size: 18px; color: var(--text-muted); margin-top: 16px; margin-bottom: 4px; font-weight:bold;">CUSTO</div>
+                            <div style="font-weight: 700; font-size: 26px; color: var(--danger);">${formatMoney(fest.custoTotal)}</div>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 20px; border-top: 2px dashed var(--border);">
+                            <span style="font-weight: 800; color: var(--text-muted); font-size: 24px;">LUCRO</span>
+                            <span style="font-size: 34px; font-weight: 800; color: #FFD700;">${formatMoney(fest.lucro)}</span>
+                        </div>
+                        
+                        ${fest.obs ? `<div style="margin-top: 20px; font-size: 22px; color: var(--text-muted); background: #222; padding: 16px; border-radius: 12px;"><i>"${fest.obs}"</i></div>` : ''}
+                        
+                        <button class="btn-delete" onclick="excluirFestival(${fest.id})">
+                            <i class="ph-bold ph-trash"></i> Apagar
+                        </button>
+                    </div>
+                `;
+            });
+            atualizarResumo();
+        }
+
+        function atualizarResumo() {
+            let lucroTotal = 0, faturamento = 0, vendidas = 0, levadas = 0;
+            festivais.forEach(f => { lucroTotal += f.lucro; faturamento += f.faturamento; vendidas += f.fatiasVendidas; levadas += f.fatiasLevadas; });
 
             document.getElementById('hist-lucro-total').innerText = formatMoney(lucroTotal);
             document.getElementById('hist-qtd-festivais').innerText = festivais.length;
         }
 
-        function calcularSimulador() {
-            const meta = parseFloat(document.getElementById('sim-meta').value) || 0;
-            const lucroMedio = parseFloat(document.getElementById('sim-lucro-medio').value) || 0;
-            if(lucroMedio > 0) {
-                const qtd = Math.ceil(meta / lucroMedio);
-                document.getElementById('sim-resultado').innerText = `${qtd} festivais`;
-            }
-        }
-
-        renderizarHistorico();
+        // Inicializar
         calcularSimulador();
-        switchTab('historico');
+        switchTab('simulador');
+
     </script>
 </body>
 </html>
-</html>
+
